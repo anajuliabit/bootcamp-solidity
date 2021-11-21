@@ -2,44 +2,49 @@
 // Version of Solidity compiler this program was written for
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-
-contract VolcanoCoin is ERC20, Ownable  {
+contract VolcanoCoin {
     
     uint256 total_supply;
+    address owner;    
+    mapping(address => uint256) public balances;
     mapping(address => Payment[]) payments;
      
     event NewSupply(uint256 _newSupply);
+    event Transfer(address recipient, uint256 amount);
     
     struct Payment {
       address recipient;
       uint256 amount;
     }
-     
-    constructor() ERC20("VolcanoCoin", "VOLC") {
-      total_supply = 10000;
-      _mint(_msgSender(), 10000);
+    
+    modifier onlyOwner {
+      if(msg.sender == owner) {
+          _;
+      }
     }
      
-    function mint(address _account, uint256 _amount) public onlyOwner {
-      _mint(_account, _amount);
-      total_supply += _amount;
-      
+    constructor() {
+      owner = msg.sender;
+      total_supply = 10000;
+      balances[owner] = total_supply;
+    }
+     
+    function increaseSupply() public onlyOwner {
+      total_supply += 1000;
+      balances[owner] += 1000;
       emit NewSupply(total_supply);
     }
     
-    function transfer(address recipient, uint256 amount) public override returns (bool) {
-      _transfer(_msgSender(), recipient, amount);
-      
-      addPayment(_msgSender(), recipient, amount);
-      return true;
+    function transfer(address _recipient, uint256 _amount) public {
+      require(balances[msg.sender] >= _amount, "Insufficient funds");
+      balances[msg.sender] -= _amount;
+      balances[_recipient] += _amount;
+    
+      payments[msg.sender].push(Payment({ recipient: _recipient, amount: _amount}));
+  
+      emit Transfer(_recipient, _amount);
     }
     
-    function addPayment(address _sender, address _receiver, uint256 _amount) internal {
-      payments[_sender].push(Payment({ recipient: _receiver, amount: _amount}));
-    }
-
     function getPayments(address _sender) public view returns(Payment[] memory) {
       return payments[_sender];
     }
