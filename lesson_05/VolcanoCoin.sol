@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract VolcanoCoin is ERC20, Ownable  {
     
-    mapping(address => Payment[]) payments;s     
+    mapping(address => Payment[]) payments;
     
     struct Payment {
       address recipient;
@@ -22,18 +22,17 @@ contract VolcanoCoin is ERC20, Ownable  {
       _mint(_msgSender(), _amount);
     }
     
-    function transfer(address recipient, uint256 amount) public override returns (bool) {
-      _transfer(_msgSender(), recipient, amount);
-      
-      addPayment(_msgSender(), recipient, amount);
+    function transfer(address recipient, uint256 _amount) public override returns (bool) {
+      _transfer(_msgSender(), recipient, _amount);
+      addPayment(_msgSender(), recipient, _amount);
       return true;
     }
     
     function addPayment(address _sender, address _receiver, uint256 _amount) internal {
-      payments[_sender].push(Payment({ recipient: _receiver, amount: _amount}));
+      payments[_sender].push(Payment(_receiver, _amount));
     }
 
-    function getPayments(address _sender) public view returns(Payment[] memory) {
-      return payments[_sender];
+    function getPayments(address _user) public view returns(Payment[] memory) {
+      return payments[_user];
     }
 }
