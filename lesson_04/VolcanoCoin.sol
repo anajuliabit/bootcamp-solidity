@@ -7,7 +7,7 @@ contract VolcanoCoin {
     uint256 total_supply;
     address owner;    
     mapping(address => uint256) public balances;
-    mapping(address => Payment[]) payments;
+    mapping(address => Payment[]) public payments;
      
     event NewSupply(uint256 _newSupply);
     event Transfer(address recipient, uint256 amount);

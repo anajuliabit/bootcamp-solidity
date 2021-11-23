@@ -1,0 +1,29 @@
+body {
+  padding: 100px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+body .content {
+  display: flex;
+}
+
+body .input {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin-right: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+body .input .input-column {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+body .input .input-column > * {
+  margin-bottom: 5px;
+}
