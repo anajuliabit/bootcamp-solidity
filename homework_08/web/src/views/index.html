@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Descentralized Storage</title>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    </head>
+    <body>
+        <div id="header">
+            <h1>Descentralized Storage - IPFS</h1>
+        </div>
+        <div class="content">
+            <div class="input">
+                <div class="input-row">
+                    <strong>Add text:</strong>
+                    <textarea id="text-input" type="textarea" placeholder="Text"></textarea>
+                    <button id="add-text-btn">Add</button>
+                </div>
+        
+                <div class="input-row">
+                    <strong>Add image:</strong>
+                    <input id="image-input" type="file" placeholder="Image" input="file">
+                    <button id="add-image-btn">Add</button>
+                </div>
+        
+                <div class="input-row">
+                    <strong>Get data:</strong>
+                    <input id="cid-input" type="text" placeholder="CID">
+                    <button id="get-data-btn">Get data</button>
+                    <button id="get-image-btn">Get image</button>
+                </div>
+            </div>
+         
+            <!-- Display Data -->
+            <div class="display-data">
+                <div>Result:</div>
+                <div id="data-anchor"></div>
+            </div>
+        </div>
+
+        <div id="header">
+            <h1>NFT</h1>
+        </div>
+        <div class="content">
+            <div class="input">
+                <div class="input-row">
+                    <strong>Mint NFT:</strong>
+                    <input id="mint-owner" type="text" placeholder="Owner">
+                    <input id="mint-data" type="text" placeholder="Token URI: e.ge, IPFS CID">
+                    <button id="mint-btn">Mint</button>
+                </div>
+        
+                <div class="input-row">
+                    <strong>Get NFT's:</strong>
+                    <input id="get-nft-address" type="text" placeholder="address">
+                    <button id="get-nft-btn">Get</button>
+                </div>
+
+                <div class="input-row">
+                    <strong>Transfer NFT:</strong>
+                    <input id="to" type="text" placeholder="To">
+                    <input id="id" type="text" placeholder="ID">
+                    <button id="transfer">Transfer</button>
+                </div>
+            </div>
+         
+            <!-- Display Data -->
+            <div class="display-data">
+                <div>Result:</div>
+                <div id="data-nft-anchor"></div>
+            </div>
+        </div>
+    </body>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://bundle.run/buffer@5.2.1"></script>
+    <script src="scripts/bundle.js"></script>
+</html>

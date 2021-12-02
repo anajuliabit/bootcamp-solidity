@@ -24,18 +24,17 @@ contract VolcanoCoin is ERC721, Ownable {
       setBaseURI(_initBaseURI);
   }
 
-  // internal
   function _baseURI() internal view virtual override returns (string memory) {
     return baseURI;
   }
 
-  function mint(string memory _tokenURI) public returns (uint256) {
+  function mint(address owner, string memory _tokenURI) public returns (uint256) {
     _tokenIds.increment();
     uint256 newItemId = _tokenIds.current();
-    _safeMint(_msgSender(), newItemId);
+    _safeMint(owner, newItemId);
 
     Token memory token  = Token(newItemId, block.timestamp, _tokenURI);
-    user_tokens[_msgSender()].push(token);
+    user_tokens[owner].push(token);
   
    return newItemId;
   }

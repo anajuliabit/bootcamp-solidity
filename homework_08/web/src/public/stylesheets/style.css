@@ -8,6 +8,7 @@ body .content {
 }
 
 body .input {
+  min-width: 600px;
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -18,12 +19,12 @@ body .input {
   color: #333;
 }
 
-body .input .input-column {
+body .input .input-row {
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
 }
 
-body .input .input-column > * {
+body .input .input-row > * {
   margin-bottom: 5px;
 }

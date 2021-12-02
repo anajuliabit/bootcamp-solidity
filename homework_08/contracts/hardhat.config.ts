@@ -1,7 +1,6 @@
 import "@nomiclabs/hardhat-ethers";
 import * as dotenv from "dotenv";
 import { HardhatUserConfig, task } from "hardhat/config";
-
 dotenv.config();
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -24,6 +23,11 @@ const config: HardhatUserConfig = {
     },
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    rinkeby: {
+      url: process.env.RINKEBY_URL || "",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
