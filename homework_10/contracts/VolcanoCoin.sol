@@ -20,7 +20,7 @@ contract VolcanoCoin is ERC20("Volcano Coin", "VLC"), AccessControl {
         Group
     }
 
-    struct Payment{
+    struct Payment {
         uint256 id;
         uint256 amount;
         address recipient;
@@ -29,7 +29,7 @@ contract VolcanoCoin is ERC20("Volcano Coin", "VLC"), AccessControl {
         uint256 timestamp;
     }
 
-    mapping (address => Payment[]) public payments;
+    mapping(address => Payment[]) public payments;
     event supplyChanged(uint256);
 
     constructor() {
@@ -37,19 +37,36 @@ contract VolcanoCoin is ERC20("Volcano Coin", "VLC"), AccessControl {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
-    function transfer(address _recipient, uint256 _amount) public virtual override returns (bool) {
+    function transfer(address _recipient, uint256 _amount)
+        public
+        virtual
+        override
+        returns (bool)
+    {
         _transfer(msg.sender, _recipient, _amount);
         addPaymentRecord(_recipient, _amount);
         return true;
     }
 
     function addPaymentRecord(address _recipient, uint256 _amount) internal {
-        payments[msg.sender].push(Payment(ids.current(), _amount, _recipient, PaymentType.Basic, "", block.timestamp));
+        payments[msg.sender].push(
+            Payment(
+                ids.current(),
+                _amount,
+                _recipient,
+                PaymentType.Basic,
+                "",
+                block.timestamp
+            )
+        );
         ids.increment();
     }
 
-    function addToTotalSupply(uint256 _quantity) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        _mint(msg.sender,_quantity);
+    function addToTotalSupply(uint256 _quantity)
+        public
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
+        _mint(msg.sender, _quantity);
         emit supplyChanged(_quantity);
     }
 
@@ -57,32 +74,53 @@ contract VolcanoCoin is ERC20("Volcano Coin", "VLC"), AccessControl {
         return payments[_user];
     }
 
-    function updatePayment(uint256 id, PaymentType _type, string memory comment) public  {
-        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender) || id == payments[msg.sender][id].id, "must-be-onwer-or-admin");
-        Payment memory payment = payments[msg.sender][id];
-        payment.type_payment = _type;
-        if(hasRole(DEFAULT_ADMIN_ROLE, msg.sender)) {
-            string memory updatedBy = "update by ";
-            payment.comment = append(comment, updatedBy, toAsciiString(msg.sender));
-        } else {
-            payment.comment = comment;
-        }
-        payment.comment = comment;
-        payments[msg.sender][id] = payment;
+    function updatePayment(
+        uint256 id,
+        PaymentType _type,
+        string memory comment
+    ) public {
+        _updatePayment(msg.sender, id, _type, comment);
     }
 
-    function append(string memory a, string memory b, string memory c) internal pure returns (string memory) {
+    function updatePaymentAdmin(
+        address _user,
+        uint256 id,
+        PaymentType _type,
+        string memory comment
+    ) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        string memory updateBy = " update by ";
+        comment = append(comment, updateBy, toAsciiString(msg.sender));
+        _updatePayment(_user, id, _type, comment);
+    }
+
+    function _updatePayment(
+        address owner,
+        uint256 id,
+        PaymentType _type,
+        string memory comment
+    ) internal {
+        require(payments[owner][id].timestamp != 0, "payment-not-found");
+        Payment storage payment = payments[owner][id];
+        payment.type_payment = _type;
+        payment.comment = comment;
+    }
+
+    function append(
+        string memory a,
+        string memory b,
+        string memory c
+    ) internal pure returns (string memory) {
         return string(abi.encodePacked(a, b, c));
     }
 
     function toAsciiString(address x) internal pure returns (string memory) {
         bytes memory s = new bytes(40);
-        for (uint i = 0; i < 20; i++) {
-            bytes1 b = bytes1(uint8(uint(uint160(x)) / (2**(8*(19 - i)))));
+        for (uint256 i = 0; i < 20; i++) {
+            bytes1 b = bytes1(uint8(uint256(uint160(x)) / (2**(8 * (19 - i)))));
             bytes1 hi = bytes1(uint8(b) / 16);
             bytes1 lo = bytes1(uint8(b) - 16 * uint8(hi));
-            s[2*i] = char(hi);
-            s[2*i+1] = char(lo);            
+            s[2 * i] = char(hi);
+            s[2 * i + 1] = char(lo);
         }
         return string(s);
     }
@@ -91,5 +129,4 @@ contract VolcanoCoin is ERC20("Volcano Coin", "VLC"), AccessControl {
         if (uint8(b) < 10) return bytes1(uint8(b) + 0x30);
         else return bytes1(uint8(b) + 0x57);
     }
-
 }
