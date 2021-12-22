@@ -2,12 +2,13 @@
 pragma solidity ^0.8.4;
 
 import "hardhat/console.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract VolcanoCoin is ERC721, Ownable {
+contract VolcanoCoin is ERC721Upgradeable, OwnableUpgradeable {
     using Counters for Counters.Counter;
+    uint256 public constant version = 2;
 
     struct Token {
         uint256 tokenId;
@@ -20,7 +21,9 @@ contract VolcanoCoin is ERC721, Ownable {
     mapping(address => Token[]) user_tokens;
     Counters.Counter private _tokenIds;
 
-    constructor(string memory _initBaseURI) ERC721("VolcanoCoin", "VLC") {
+    function initialize(string memory _initBaseURI) public initializer {
+        __Ownable_init();
+        __ERC721_init("VolcanoCoin", "VLC");
         setBaseURI(_initBaseURI);
     }
 
@@ -56,5 +59,23 @@ contract VolcanoCoin is ERC721, Ownable {
 
     function setBaseURI(string memory _newBaseURI) public onlyOwner {
         baseURI = _newBaseURI;
+    }
+
+    function _msgData()
+        internal
+        pure
+        override(ContextUpgradeable)
+        returns (bytes memory)
+    {
+        return msg.data;
+    }
+
+    function _msgSender()
+        internal
+        view
+        override(ContextUpgradeable)
+        returns (address)
+    {
+        return msg.sender;
     }
 }

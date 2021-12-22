@@ -47,7 +47,7 @@
      "**/yarn-error.log": true,
      "**/.yalc": true
   },
-  "solidity.packageDefaultDependenciesDirectory": "homework_08/contracts/node_modules",
+  "solidity.packageDefaultDependenciesDirectory": "homework_12/node_modules",
   "editor.formatOnSave": true,
   "solidity.formatter": "prettier",
   "[solidity]": {
