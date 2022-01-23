@@ -55,21 +55,36 @@ describe("Volcano Coin", () => {
 
   it("increases allowance for address1", async () => {
     await volcanoContract.increaseAllowance(addr1.address, AMOUNT);
-    let finalAllowance = await volcanoContract.allowance(owner.address, addr1.address);
+    let finalAllowance = await volcanoContract.allowance(
+      owner.address,
+      addr1.address
+    );
 
-    assert.equal(AMOUNT, Number(finalAllowance), "Final allowance and amount should be equal");
+    assert.equal(
+      AMOUNT,
+      Number(finalAllowance),
+      "Final allowance and amount should be equal"
+    );
     assert.notEqual(0, finalAllowance, "Final allowance should not be zero");
-
   });
 
   it("decreases allowance for address1", async () => {
     await volcanoContract.approve(addr1.address, AMOUNT);
-    let startingAllowance = await volcanoContract.allowance(owner.address, addr1.address);
+    let startingAllowance = await volcanoContract.allowance(
+      owner.address,
+      addr1.address
+    );
 
-    const decrease = await volcanoContract.decreaseAllowance(addr1.address, AMOUNT);
+    const decrease = await volcanoContract.decreaseAllowance(
+      addr1.address,
+      AMOUNT
+    );
     await decrease.wait();
 
-    let finalAllowance = await volcanoContract.allowance(owner.address, addr1.address);
+    let finalAllowance = await volcanoContract.allowance(
+      owner.address,
+      addr1.address
+    );
     finalAllowance = Number(finalAllowance);
 
     expect(finalAllowance).to.equal(0);
@@ -77,16 +92,19 @@ describe("Volcano Coin", () => {
       finalAllowance,
       startingAllowance - AMOUNT,
       "Allowance and amount not equal"
-   );
+    );
     assert.notEqual(
       finalAllowance,
       startingAllowance,
       "The allowance shouldn't be equal to the starting allowance"
-    )
+    );
   });
 
   it("emits an event when increasing allowance", async () => {
-    const response = await volcanoContract.increaseAllowance(addr1.address, AMOUNT);
+    const response = await volcanoContract.increaseAllowance(
+      addr1.address,
+      AMOUNT
+    );
     const { events } = await response.wait();
 
     expect(events).to.have.length(1);
@@ -95,11 +113,13 @@ describe("Volcano Coin", () => {
     expect(events[0].args.spender).to.equal(addr1.address);
     expect(events[0].args.value).to.equal(AMOUNT);
   });
-  
+
   it("reverts decreaseAllowance when trying decrease below 0", async () => {
     // inital allowance = 0, will try to decrease by 1. 0 - 1 = error
     await expectRevert(
-      volcanoContract.decreaseAllowance(addr1.address, 1), "ERC20: decreased allowance below zero");
+      volcanoContract.decreaseAllowance(addr1.address, 1),
+      "ERC20: decreased allowance below zero"
+    );
   });
 
   it("updates balances on successful transfer from owner to addr1", async () => {
@@ -114,7 +134,8 @@ describe("Volcano Coin", () => {
 
   it("revets transfer when sender does not have enough balance", async () => {
     await expectRevert(
-      volcanoContract.transfer(addr1.address, 100001), "ERC20: transfer amount exceeds balance"
+      volcanoContract.transfer(addr1.address, 100001),
+      "ERC20: transfer amount exceeds balance"
     );
   });
 
