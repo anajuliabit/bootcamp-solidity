@@ -17,7 +17,7 @@ This repo contains all my solutions for Encode bootcamp homework
 - [x] 11. Hack the levels - solidity security
 - [x] 12. Upgradeable contracts with proxy
 - [x] 13. DeFi interactions
-- [ ] 14. Interactig with compound
+- [x] 14. Interacting with compound and Chainlink data feeds
 - [x] 16-A. Subgraph
 - [ ] 16-B. Chainlink
 - [ ] 18. Debbug opcodes
